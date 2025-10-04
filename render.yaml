@@ -1,0 +1,57 @@
+services:
+  # Database Service
+  - type: pserv
+    name: zenconnect-database
+    env: docker
+    dockerfilePath: ./database/Dockerfile
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: zenconnect-db
+          property: connectionString
+
+  # Backend Service
+  - type: web
+    name: zenconnect-backend
+    env: node
+    buildCommand: cd backend && npm install && npm run build
+    startCommand: cd backend && npm start
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: zenconnect-db
+          property: connectionString
+      - key: FRONTEND_URL
+        fromService:
+          type: web
+          name: zenconnect-frontend
+          property: url
+      - key: JWT_SECRET
+        generateValue: true
+      - key: PORT
+        value: 10000
+
+  # Frontend Service
+  - type: web
+    name: zenconnect-frontend
+    env: node
+    buildCommand: cd frontend && npm install && npm run build
+    startCommand: cd frontend && npm start
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          type: web
+          name: zenconnect-backend
+          property: url
+      - key: NEXTAUTH_SECRET
+        generateValue: true
+      - key: NEXTAUTH_URL
+        fromService:
+          type: web
+          name: zenconnect-frontend
+          property: url
+
+databases:
+  - name: zenconnect-db
+    databaseName: zenconnect
+    user: zenconnect_user

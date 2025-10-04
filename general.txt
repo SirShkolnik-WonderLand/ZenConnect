@@ -1,0 +1,144 @@
+Got it. I’ve carefully read through all the screenshots, the Slack exchanges, the flowchart, dashboards, and your structured writeup. Let me organize **what Brian wants you to build for the clinic project (Marie’s project, ZenConnect MVP)** into a clear breakdown:
+
+---
+
+## 1. **Client Problem & Context**
+
+* **JaneApp Limitations**: No strong API, poor CRM functions, weak marketing tools. CSV export is the only realistic integration point.
+* **Referral Program Need**: Marie (clinic owner) wants to **start simple with referrals first**, before anything else (automation, branding, etc.).
+* **Marketing Tools**: No MailChimp or external tool yet; JaneApp’s built-in marketing is not used.
+* **Branding**: Canva branding exists, but no official guide.
+
+---
+
+## 2. **Target Market Insights (from Discovery)**
+
+* **Competitors**: Wellbynd, For Health’s Sake, Myodetox.
+* **Differentiator**: Professors as practitioners + energy healing modality.
+* **Demographics**:
+
+  * 25–45 female, white-collar professionals, \$100k+ income.
+  * Primarily Annex neighbourhood in Toronto, GTA.
+* **Behavior**:
+
+  * Monthly visits, usually repeat the same service unless practitioner referral.
+  * Busiest Oct–Dec (insurance season), slowest in summer.
+  * Most popular: massage, psychotherapy, acupuncture.
+  * Least popular: nutrition/astrology, energy education, sound healing.
+  * Booking mostly online/phone, 2–3 days in advance.
+  * Payment after service (no card on file).
+* **Challenges**:
+
+  * New client acquisition.
+  * Clients hesitant to commit to preventive care out-of-pocket.
+
+---
+
+## 3. **System (ZenConnect MVP)**
+
+Brian’s direction and your finalized plan = **CSV-driven Marketing & Referral Automation Layer**.
+
+### **A. Manual CSV Workflow**
+
+1. Clinic admin exports appointments report (daily/weekly) from JaneApp.
+2. CSV uploaded to **Internal Admin Dashboard**.
+3. Python backend validates required columns:
+
+   * Patient Name
+   * Email
+   * Service Name
+   * Appointment Date/Status
+
+---
+
+### **B. Python Application (Core Engine)**
+
+* **Parsing & Deduplication**: Ensure each appointment processed only once.
+* **Service Classification**:
+
+  * Cross-checks service list against “Medical” vs “Wellness.”
+  * If unknown, flags in dashboard for manual classification (learns for future).
+* **Referral Code Generation** (for eligible *Wellness* clients only):
+
+  * Generates unique, secure referral code.
+  * Stored in DB tied to client record.
+* **Action Triggering**:
+
+  * Calls **MailChimp API** (not sending directly).
+  * Sends payload: patient details, right template, referral code if applicable.
+* **Audit Logging**:
+
+  * Immutable log of every step (upload, classify, trigger, send).
+
+---
+
+### **C. MailChimp API**
+
+* **Two Templates**:
+
+  1. **Wellness Email**:
+
+     * Review request + referral code & reward.
+  2. **Medical Email**:
+
+     * Review request only, *no referral incentive* (compliance).
+* **Dynamic Merge Fields**: Name, service, referral code.
+
+---
+
+### **D. Referral Redemption Tracking**
+
+* **Detection**:
+
+  * New patient booking contains “Referral Code Used” field in JaneApp.
+  * Next CSV upload triggers scan for redeemed codes.
+* **Flagging & Task Creation**:
+
+  * Marks referral code as “Redeemed.”
+  * Creates admin dashboard task: *“Issue Reward: \[Referrer Name] for \[New Patient Name].”*
+* **Manual Reward Issuance**:
+
+  * Clinic staff issue gift certificate manually in JaneApp.
+  * Then mark task complete in dashboard.
+
+---
+
+## 4. **Admin Dashboard Features**
+
+* Secure login for staff.
+* CSV upload button.
+* Service classification manager (manual override).
+* Referral tracking list with redemption status.
+* Audit logs viewer.
+* Task list for issuing rewards.
+
+---
+
+## 5. **Design & Branding**
+
+* Brian wants MVP **similar to Snoball/ReferWell style dashboards** (he shared screenshots).
+* Blue/white dashboard with side menu (Clients, Service Review, Email Templates, Referral Tracking, Audit Logs).
+* Later: color palette can be improved, but MVP = function > form.
+
+---
+
+## 6. **Immediate Build Scope (Brian’s MVP Ask)**
+
+✅ CSV upload + validation
+✅ Python classification engine (Medical vs Wellness)
+✅ Referral code generator
+✅ MailChimp API trigger
+✅ Two templates (Medical vs Wellness)
+✅ Immutable audit log
+✅ Admin dashboard with task manager for manual reward issuance
+
+---
+
+### 🎯 **In summary:**
+
+Brian wants you to build **ZenConnect MVP**:
+
+* A **CSV-to-MailChimp referral automation system** with audit logs, referral code tracking, and an admin dashboard.
+* Phase 1 = referrals only (Marie’s immediate ask).
+* Branding and extra marketing (events, campaigns, etc.) can come later.
+
