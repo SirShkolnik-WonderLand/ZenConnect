@@ -172,6 +172,21 @@ cd backend && npm test
 4. Run tests and linting
 5. Submit a pull request
 
+## IP & Use Notice — ZenConnect
+
+© 2025–present AliceSolutionsGroup Inc. and SmartStart Hub. All rights reserved.
+
+ZenConnect and all assets in this repository (code, designs, documentation, data models, and prompts) are proprietary intellectual property of AliceSolutionsGroup Inc. and SmartStart Hub, together with the individual IP owner(s) within our group. Unauthorized copying, distribution, sublicensing, or derivative works are prohibited without prior written permission.
+
+**Intended use.** ZenConnect is an internal clinic management and outreach system providing CSV-based appointment processing, referral code automation, Mailchimp email flows, immutable audit logs, and an admin dashboard. Access is restricted to authorized personnel under written agreement.
+
+**Data protection.** Users must comply with applicable privacy and health-information laws. Store only necessary patient data; do not include sensitive fields in outbound payloads; all credentials must be provisioned via environment variables. Audit logs are immutable and required for each critical operation.
+
+**Third-party services.** Mailchimp®, JaneApp®, and any other third-party tools are trademarks of their respective owners. ZenConnect is independent and not affiliated with or endorsed by those parties. Use of their services is subject to their terms and licenses.
+
+**No warranty.** This software and related materials are provided "as is" without warranties of any kind.  
+Permissions & inquiries: support@alicesolutionsgroup.com
+
 ## 📄 License
 
 This project is private and proprietary.
