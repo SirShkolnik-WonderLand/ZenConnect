@@ -1,10 +1,21 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../../database/src/generated/prisma';
+
+// Import routes
+import authRoutes from './routes/auth';
+import taskRoutes from './routes/tasks';
+import serviceRoutes from './routes/services';
+import referralRoutes from './routes/referrals';
+import uploadRoutes from './routes/uploads';
+import auditRoutes from './routes/audit';
+import mailchimpRoutes from './routes/mailchimp';
+import userRoutes from './routes/users';
+import settingsRoutes from './routes/settings';
 
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3002;
 const prisma = new PrismaClient();
 
 // Middleware
@@ -22,11 +33,15 @@ app.get('/api/healthz', (req, res) => {
 });
 
 // API Routes
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/uploads', require('./routes/uploads'));
-app.use('/api/tasks', require('./routes/tasks'));
-app.use('/api/services', require('./routes/services'));
-app.use('/api/audit', require('./routes/audit'));
+app.use('/api/auth', authRoutes);
+app.use('/api/tasks', taskRoutes);
+app.use('/api/services', serviceRoutes);
+app.use('/api/referrals', referralRoutes);
+app.use('/api/uploads', uploadRoutes);
+app.use('/api/audit', auditRoutes);
+app.use('/api/mailchimp', mailchimpRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/settings', settingsRoutes);
 
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
