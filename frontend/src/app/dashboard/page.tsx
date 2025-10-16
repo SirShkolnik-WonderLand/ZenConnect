@@ -133,7 +133,7 @@ export default function DashboardPage() {
                       </button>
               </div>
             </div>
-          </div>
+
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -256,7 +256,6 @@ export default function DashboardPage() {
               )}
             </ul>
           </div>
-        </div>
       </div>
     </MainLayout>
   );
